@@ -1,12 +1,6 @@
 import random
 from carregar_vessel import VesselProfile
 
-# Parâmetros de restrição
-CAPACIDADE_CELULA = {"20ft": 1, "40ft": 2}
-PESO_MAX_PILHA = 60000
-LIMITE_GRAVIDADE_LONGITUDINAL = 500000
-LIMITE_GRAVIDADE_TRANSVERSAL = 300000
-
 class Container:
     def __init__(self, cid, tipo, peso):
         self.id = cid
