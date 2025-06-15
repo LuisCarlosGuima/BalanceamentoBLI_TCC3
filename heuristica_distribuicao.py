@@ -108,37 +108,30 @@ class Navio:
 def evaluate(navio):
     return len(navio.allocated)
 
+# Adicione esta nova função em heuristica_distribuicao.py
 
-def greedy_allocation(containers, navio):
+def simple_initial_solution(containers, navio):
     """
-    Aloca cada container **uma única vez** num único porto,
-    tentando as posições em ordem aleatória.
+    Builds an initial solution by placing containers sequentially in the
+    first valid positions found. This is a fast, non-greedy alternative.
     """
-    # lista de todas as posições possíveis (x=baia, y=pilha)
-    positions = [(x, y)
-                 for x in range(navio.num_baias)
-                 for y in range(navio.num_pilhas)]
+    print("Building a simple, non-greedy initial solution...")
+    
+    # Create a list of all possible (bay, stack) positions
+    all_positions = [(x, y)
+                     for x in range(navio.num_baias)
+                     for y in range(navio.num_pilhas)]
 
-    for idx, c in enumerate(containers):
-        # computa só as posições que passam nas restrições
-        valid = [(x, y) for (x, y) in positions
-                      if navio.verificar_restricoes(c, x, y)]
-
-        # DEBUG: para o primeiro container, imprime as posições válidas
-        if idx == 0:
-            print(f"[DEBUG] Posições válidas para c0: {valid}")
-
-        # embaralha para não privilegiar sempre a mesma baia
-        random.shuffle(valid)
-
-        # aloca na primeira posição válida (se houver)
-        if valid:
-            x, y = valid[0]
-            navio.alocar(c, x, y)
-        # se não tiver posição válida, simplesmente pula este container
-
+    for c in containers:
+        # For each container, try to find a valid spot
+        for x, y in all_positions:
+            if navio.verificar_restricoes(c, x, y):
+                navio.alocar(c, x, y)
+                # Once placed, move to the next container
+                break
+    
+    # This function modifies 'navio' directly and returns it
     return navio
-
 
 def perturb(navio, perturb_size):
     """
@@ -228,7 +221,8 @@ def heuristica_distribuicao(containers, navio, max_iter=100, perturb_size=2):
     2. Iterated Local Search com perturbações e busca local
     """
     # etapa 1: alocação inicial gulosa
-    greedy_allocation(containers, navio)
+    simple_initial_solution(containers, navio)
+    
     # clona solução inicial
     best = navio.clone()
     best_score = evaluate(best)
