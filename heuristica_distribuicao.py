@@ -112,10 +112,10 @@ def evaluate(navio):
 
 def simple_initial_solution(containers, navio):
     """
-    Builds an initial solution by placing containers sequentially in the
-    first valid positions found. This is a fast, non-greedy alternative.
+    Cria uma solução inicial posicionando os contêineres sequencialmente nas
+    primeiras posições válidas encontradas.
     """
-    print("Building a simple, non-greedy initial solution...")
+    print("Construindo solução inicial simples...")
     
     # Create a list of all possible (bay, stack) positions
     all_positions = [(x, y)
